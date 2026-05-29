@@ -1,9 +1,719 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Neuroplasticity & Habit Formation</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a2e;
+    --deep: #16213e;
+    --mid: #0f3460;
+    --accent: #e94560;
+    --gold: #f5a623;
+    --mint: #4ecdc4;
+    --lavender: #a8c4ff;
+    --cream: #fef9f0;
+    --soft: #f0f4ff;
+    --muted: #8892a4;
+    --white: #ffffff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--cream);
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+    padding: 70px 40px 60px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at 20% 50%, rgba(78,205,196,0.12) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(233,69,96,0.12) 0%, transparent 40%);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(78,205,196,0.15);
+    border: 1px solid rgba(78,205,196,0.4);
+    color: var(--mint);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 6px 18px;
+    border-radius: 100px;
+    margin-bottom: 24px;
+    animation: fadeDown 0.8s ease both;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.6rem);
+    font-weight: 900;
+    line-height: 1.15;
+    color: var(--white);
+    animation: fadeDown 0.9s ease 0.1s both;
+  }
+  .hero h1 span { color: var(--mint); font-style: italic; }
+  .hero-sub {
+    margin-top: 16px;
+    font-size: 1rem;
+    color: rgba(255,255,255,0.5);
+    font-weight: 300;
+    animation: fadeDown 1s ease 0.2s both;
+  }
+  .hero-dots {
+    display: flex; justify-content: center; gap: 8px; margin-top: 32px;
+    animation: fadeDown 1s ease 0.35s both;
+  }
+  .hero-dots span {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+  }
+  .hero-dots span:nth-child(2) { background: var(--mint); }
+
+  /* ─── WRAPPER ─── */
+  .page { max-width: 820px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  /* ─── SECTION LABELS ─── */
+  .label {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .label-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
+
+  /* ─── CARDS ─── */
+  .card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    padding: 32px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: fadeUp 0.6s ease both;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  }
+  .card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    border-radius: 20px 20px 0 0;
+  }
+  .card.mint::before { background: linear-gradient(90deg, var(--mint), transparent); }
+  .card.gold::before { background: linear-gradient(90deg, var(--gold), transparent); }
+  .card.accent::before { background: linear-gradient(90deg, var(--accent), transparent); }
+  .card.lavender::before { background: linear-gradient(90deg, var(--lavender), transparent); }
+
+  .card h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 14px;
+  }
+  .card p { color: rgba(255,255,255,0.65); font-size: 0.95rem; }
+
+  /* ─── HIGHLIGHT BOX ─── */
+  .highlight {
+    background: rgba(78,205,196,0.08);
+    border-left: 3px solid var(--mint);
+    border-radius: 0 12px 12px 0;
+    padding: 16px 20px;
+    margin: 16px 0;
+    color: rgba(255,255,255,0.8);
+    font-size: 0.95rem;
+  }
+  .highlight strong { color: var(--mint); }
+
+  /* ─── MYTH vs TRUTH ─── */
+  .myth-truth { display: grid; gap: 12px; margin-top: 18px; }
+  .myth, .truth {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 14px 18px; border-radius: 12px;
+    font-size: 0.9rem;
+  }
+  .myth { background: rgba(233,69,96,0.1); border: 1px solid rgba(233,69,96,0.2); color: rgba(255,255,255,0.6); }
+  .truth { background: rgba(78,205,196,0.1); border: 1px solid rgba(78,205,196,0.2); color: rgba(255,255,255,0.85); }
+  .myth .icon { color: var(--accent); font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+  .truth .icon { color: var(--mint); font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+  .myth span, .truth span { text-decoration: none; }
+  .myth span { text-decoration: line-through; opacity: 0.7; }
+
+  /* ─── STORY BLOCK ─── */
+  .story {
+    background: linear-gradient(135deg, rgba(245,166,35,0.08), rgba(245,166,35,0.03));
+    border: 1px solid rgba(245,166,35,0.2);
+    border-radius: 20px;
+    padding: 30px 32px;
+    margin-bottom: 20px;
+    animation: fadeUp 0.6s ease both;
+  }
+  .story h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+  .story-phases { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 18px; }
+  .phase {
+    background: rgba(255,255,255,0.04);
+    border-radius: 14px;
+    padding: 18px;
+  }
+  .phase-title {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 10px;
+  }
+  .phase-title.then { color: var(--accent); }
+  .phase-title.now { color: var(--mint); }
+  .phase ul { list-style: none; }
+  .phase ul li {
+    font-size: 0.88rem;
+    color: rgba(255,255,255,0.65);
+    padding: 4px 0;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .phase ul li::before { content: '·'; color: var(--muted); font-size: 1.2rem; }
+
+  /* ─── FLOW CHART ─── */
+  .flowchart { margin-top: 20px; }
+  .flow-step {
+    display: flex; align-items: center; gap: 16px;
+    padding: 14px 20px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 14px;
+    margin-bottom: 4px;
+    transition: background 0.2s;
+  }
+  .flow-step:hover { background: rgba(255,255,255,0.07); }
+  .flow-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+  .flow-step-text { flex: 1; }
+  .flow-step-text strong {
+    display: block;
+    color: var(--white);
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+  .flow-step-text span {
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+  .flow-arrow {
+    text-align: center;
+    color: rgba(255,255,255,0.15);
+    font-size: 1.2rem;
+    padding: 2px 0;
+    margin-left: 36px;
+  }
+
+  /* ─── DEFINITION CARD ─── */
+  .def-block {
+    text-align: center;
+    padding: 36px;
+    background: linear-gradient(135deg, rgba(168,196,255,0.1), rgba(78,205,196,0.05));
+    border: 1px solid rgba(168,196,255,0.2);
+    border-radius: 20px;
+    margin-bottom: 20px;
+    animation: fadeUp 0.6s ease both;
+  }
+  .def-emoji { font-size: 2.5rem; margin-bottom: 16px; }
+  .def-block h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    color: var(--white);
+    margin-bottom: 16px;
+  }
+  .def-text {
+    font-size: 1.05rem;
+    color: rgba(255,255,255,0.7);
+    max-width: 520px;
+    margin: 0 auto 12px;
+  }
+  .def-text-alt {
+    font-size: 0.9rem;
+    color: var(--lavender);
+    font-style: italic;
+  }
+
+  /* ─── PATH ANALOGY ─── */
+  .path-steps { display: grid; gap: 10px; margin-top: 16px; }
+  .path-step {
+    display: flex; align-items: center; gap: 14px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+  }
+  .path-step:nth-child(1) { background: rgba(233,69,96,0.1); }
+  .path-step:nth-child(2) { background: rgba(245,166,35,0.1); }
+  .path-step:nth-child(3) { background: rgba(78,205,196,0.1); }
+  .path-step .path-icon { font-size: 1.3rem; width: 32px; text-align: center; flex-shrink: 0; }
+  .path-step .path-label { font-weight: 500; color: var(--white); }
+  .path-step .path-desc { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
+
+  /* ─── SURVEY SECTION ─── */
+  .survey-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 18px; }
+  .survey-item {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 14px;
+    padding: 18px 20px;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .survey-item:hover { transform: scale(1.02); border-color: rgba(255,255,255,0.15); }
+  .survey-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    margin-bottom: 6px;
+  }
+  .survey-title { font-weight: 500; color: var(--white); font-size: 0.95rem; margin-bottom: 8px; }
+  .survey-qs { font-size: 0.82rem; color: rgba(255,255,255,0.5); line-height: 1.6; }
+
+  /* ─── CUE TAGS ─── */
+  .cue-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  .cue-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(168,196,255,0.1);
+    border: 1px solid rgba(168,196,255,0.2);
+    color: var(--lavender);
+    padding: 5px 12px;
+    border-radius: 100px;
+    font-size: 0.8rem;
+  }
+
+  /* ─── HYPOTHESIS ─── */
+  .hypothesis {
+    background: linear-gradient(135deg, rgba(233,69,96,0.1), rgba(168,196,255,0.05));
+    border: 1px solid rgba(233,69,96,0.25);
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 20px;
+    text-align: center;
+    animation: fadeUp 0.6s ease both;
+  }
+  .hyp-equation {
+    display: flex; align-items: center; justify-content: center;
+    flex-wrap: wrap; gap: 16px; margin: 22px 0;
+  }
+  .hyp-box {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 14px 20px;
+    min-width: 130px;
+    text-align: center;
+  }
+  .hyp-box .icon { font-size: 1.6rem; margin-bottom: 6px; }
+  .hyp-box .label { font-size: 0.75rem; color: var(--muted); margin-bottom: 4px; font-family: 'DM Mono', monospace; letter-spacing: 0.1em; }
+  .hyp-box .value { font-size: 0.95rem; font-weight: 500; color: var(--white); }
+  .hyp-arrow { font-size: 1.5rem; color: var(--accent); }
+
+  /* ─── PIPELINE ─── */
+  .pipeline {
+    display: flex; align-items: center; flex-wrap: wrap;
+    gap: 6px; margin-top: 18px; justify-content: center;
+  }
+  .pipe-step {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 10px 16px;
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.75);
+    text-align: center;
+  }
+  .pipe-arrow { color: var(--muted); font-size: 0.9rem; }
+
+  /* ─── MEMORY LOCK ─── */
+  .memory-lock {
+    background: linear-gradient(135deg, #0f3460, #16213e);
+    border: 1px solid rgba(78,205,196,0.3);
+    border-radius: 24px;
+    padding: 40px 32px;
+    text-align: center;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+    animation: fadeUp 0.6s ease both;
+  }
+  .memory-lock::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at 50% 100%, rgba(78,205,196,0.1), transparent 60%);
+  }
+  .memory-lock h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    color: var(--mint);
+    margin-bottom: 28px;
+  }
+  .lock-chain { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 0; }
+  .lock-node {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(78,205,196,0.2);
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: 0.85rem;
+    color: var(--cream);
+    min-width: 90px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+  .lock-node .node-icon { font-size: 1.1rem; margin-bottom: 4px; }
+  .lock-connector { color: var(--mint); font-size: 1rem; margin: 0 4px; }
+
+  /* ─── SUMMARY BANNER ─── */
+  .summary {
+    background: linear-gradient(135deg, var(--mid), #1a1a2e);
+    border: 1px solid rgba(78,205,196,0.2);
+    border-radius: 20px;
+    padding: 30px 32px;
+    margin-bottom: 20px;
+    animation: fadeUp 0.6s ease both;
+  }
+  .summary p {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    color: var(--white);
+    font-style: italic;
+    line-height: 1.7;
+    text-align: center;
+  }
+  .summary p strong { color: var(--mint); font-style: normal; }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 600px) {
+    .story-phases { grid-template-columns: 1fr; }
+    .survey-grid { grid-template-columns: 1fr; }
+    .hyp-equation { flex-direction: column; }
+    .lock-chain { flex-direction: column; gap: 6px; }
+    .lock-connector { transform: rotate(90deg); }
+    .page { padding: 24px 16px 60px; }
+  }
+
+  .section-gap { height: 10px; }
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+    margin: 28px 0;
+  }
+</style>
+</head>
 <body>
 
-<h1>My First</h1>
-<p>My first paragraph.</p>
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">🧬 Project Foundation Sheet</div>
+  <h1>Neuroplasticity Through<br><span>Habit Formation</span></h1>
+  <p class="hero-sub">Behavioral Evidence of Brain Change Through Repetition</p>
+  <div class="hero-dots">
+    <span></span><span></span><span></span>
+  </div>
+</div>
 
+<div class="page">
+
+  <!-- WHAT ARE WE STUDYING? -->
+  <div class="label"><span class="label-dot"></span> Section 01</div>
+  <div class="card mint" style="animation-delay:0.05s">
+    <h2>🤔 What Are We Actually Studying?</h2>
+    <div class="myth-truth">
+      <div class="myth"><span class="icon">✕</span><span>We are studying neurons</span></div>
+      <div class="myth"><span class="icon">✕</span><span>We are studying the brain</span></div>
+      <div class="myth"><span class="icon">✕</span><span>We are studying psychology</span></div>
+    </div>
+    <div class="highlight" style="margin-top:16px">
+      <strong>✦ The real answer:</strong> We are studying how <strong>repeated behaviors become automatic</strong> — then using biology to explain <em>why</em> this happens.
+    </div>
+  </div>
+
+  <!-- HANDWRITING STORY -->
+  <div class="label" style="margin-top:10px"><span class="label-dot"></span> Section 02</div>
+  <div class="story">
+    <h3>✏️ The Handwriting Story</h3>
+    <p style="color:rgba(255,255,255,0.6); font-size:0.9rem">A simple example that reveals something profound about your brain.</p>
+    <div class="story-phases">
+      <div class="phase">
+        <div class="phase-title then">⏪ Class 1 — Then</div>
+        <ul>
+          <li>Thought about every line</li>
+          <li>How to hold the pencil</li>
+          <li>How much pressure to apply</li>
+          <li>Where to place the pencil</li>
+          <li>Everything required effort</li>
+        </ul>
+      </div>
+      <div class="phase">
+        <div class="phase-title now">⏩ Today — Now</div>
+        <ul>
+          <li>No conscious thought</li>
+          <li>Fingers move automatically</li>
+          <li>Words form on autopilot</li>
+          <li>Attention is freed up</li>
+          <li>Writing just <em>happens</em></li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight" style="margin-top:18px">
+      The pen didn't change. The notebook didn't change. <strong>Your brain changed.</strong>
+    </div>
+  </div>
+
+  <!-- DEFINITION -->
+  <div class="def-block" style="animation-delay:0.1s">
+    <div class="def-emoji">🧠</div>
+    <h2>What is Neuroplasticity?</h2>
+    <p class="def-text">The brain's ability to <strong style="color:var(--mint)">change through experience and repetition</strong> — reorganizing its structure and pathways based on what we repeatedly do.</p>
+    <p class="def-text-alt">"The brain learns, adapts, and rewires itself."</p>
+  </div>
+
+  <!-- NEURAL PATHWAY -->
+  <div class="label"><span class="label-dot"></span> Section 03</div>
+  <div class="card gold" style="animation-delay:0.15s">
+    <h2>🧩 What is a Neural Pathway?</h2>
+    <p style="margin-bottom:16px">A route inside the brain that signals travel through during a behavior.</p>
+    <div class="flowchart">
+      <div class="flow-step">
+        <div class="flow-icon" style="background:rgba(245,166,35,0.15)">✍️</div>
+        <div class="flow-step-text"><strong>Writing</strong><span>Action is initiated</span></div>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">
+        <div class="flow-icon" style="background:rgba(168,196,255,0.15)">📖</div>
+        <div class="flow-step-text"><strong>Remembering Letters</strong><span>Memory is accessed</span></div>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">
+        <div class="flow-icon" style="background:rgba(78,205,196,0.15)">🖐️</div>
+        <div class="flow-step-text"><strong>Moving Fingers</strong><span>Motor cortex activates</span></div>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">
+        <div class="flow-icon" style="background:rgba(233,69,96,0.15)">🔤</div>
+        <div class="flow-step-text"><strong>Forming Words</strong><span>Patterns are executed</span></div>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">
+        <div class="flow-icon" style="background:rgba(78,205,196,0.15)">✅</div>
+        <div class="flow-step-text"><strong>Sentence Complete</strong><span>Behavior accomplished</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOREST PATH ANALOGY -->
+  <div class="card lavender" style="animation-delay:0.2s">
+    <h2>🌲 The Forest Path Analogy</h2>
+    <p>What happens when a pathway is used repeatedly?</p>
+    <div class="path-steps" style="margin-top:16px">
+      <div class="path-step">
+        <div class="path-icon">🌿</div>
+        <div>
+          <div class="path-label">Day 1 — Small overgrown path</div>
+          <div class="path-desc">Rarely used, hard to navigate, signals travel slowly</div>
+        </div>
+      </div>
+      <div class="path-step">
+        <div class="path-icon">🛤️</div>
+        <div>
+          <div class="path-label">After repetition — Clear path</div>
+          <div class="path-desc">Used often, easier to traverse, signals travel faster</div>
+        </div>
+      </div>
+      <div class="path-step">
+        <div class="path-icon">🛣️</div>
+        <div>
+          <div class="path-label">After thousands of uses — Wide road</div>
+          <div class="path-desc">Deeply embedded, effortless, behavior becomes automatic</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AUTOMATICITY -->
+  <div class="card accent" style="animation-delay:0.25s">
+    <h2>🤖 What is Automaticity?</h2>
+    <div class="highlight">
+      <strong>Definition:</strong> Doing something without consciously thinking about every step — almost on autopilot.
+    </div>
+    <div style="margin-top:16px; display:grid; grid-template-columns:repeat(auto-fill, minmax(130px, 1fr)); gap:10px">
+      <div style="background:rgba(255,255,255,0.04);border-radius:12px;padding:14px;text-align:center;font-size:0.85rem;color:rgba(255,255,255,0.7)">✏️<br>Writing</div>
+      <div style="background:rgba(255,255,255,0.04);border-radius:12px;padding:14px;text-align:center;font-size:0.85rem;color:rgba(255,255,255,0.7)">🚶 <br>Walking</div>
+      <div style="background:rgba(255,255,255,0.04);border-radius:12px;padding:14px;text-align:center;font-size:0.85rem;color:rgba(255,255,255,0.7)">🪥<br>Brushing teeth</div>
+      <div style="background:rgba(255,255,255,0.04);border-radius:12px;padding:14px;text-align:center;font-size:0.85rem;color:rgba(255,255,255,0.7)">📱<br>Unlocking phone</div>
+    </div>
+  </div>
+
+  <!-- HOW HABIT FORMS -->
+  <div class="label" style="margin-top:10px"><span class="label-dot"></span> Section 04</div>
+  <div class="card mint" style="animation-delay:0.3s">
+    <h2>🔄 How a Habit Forms</h2>
+    <div class="flowchart" style="margin-top:6px">
+      <div class="flow-step">
+        <div class="flow-icon" style="background:rgba(78,205,196,0.15)">🔁</div>
+        <div class="flow-step-text"><strong>Repetition</strong><span>Behavior is performed again and again</span></div>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">
+        <div class="flow-icon" style="background:rgba(168,196,255,0.15)">🧠</div>
+        <div class="flow-step-text"><strong>Neural Pathway Strengthens</strong><span>Myelin sheath builds, signals speed up</span></div>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">
+        <div class="flow-icon" style="background:rgba(245,166,35,0.15)">⚡</div>
+        <div class="flow-step-text"><strong>Less Effort Required</strong><span>Cognitive load decreases</span></div>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">
+        <div class="flow-icon" style="background:rgba(233,69,96,0.15)">🤖</div>
+        <div class="flow-step-text"><strong>Automaticity Develops</strong><span>Behavior runs without conscious thought</span></div>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">
+        <div class="flow-icon" style="background:rgba(78,205,196,0.15)">✅</div>
+        <div class="flow-step-text"><strong>Habit Forms</strong><span>Neuroplasticity has occurred</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROJECT QUESTION -->
+  <div class="hypothesis">
+    <div class="label" style="justify-content:center; margin-bottom:12px"><span class="label-dot"></span> Research Question</div>
+    <h2 style="font-family:'Playfair Display',serif; font-size:1.4rem; color:var(--white); margin-bottom:8px">🎯 What Are We Trying to Find?</h2>
+    <div class="hyp-equation">
+      <div class="hyp-box">
+        <div class="icon">🔁</div>
+        <div class="label" style="color:var(--muted); display:block; margin-bottom:4px">Variable A</div>
+        <div class="value">Higher Repetition</div>
+      </div>
+      <div class="hyp-arrow">→</div>
+      <div class="hyp-box">
+        <div class="icon">🤖</div>
+        <div class="label" style="color:var(--muted); display:block; margin-bottom:4px">Variable B</div>
+        <div class="value">Higher Automaticity</div>
+      </div>
+    </div>
+    <p style="color:rgba(255,255,255,0.5); font-size:0.85rem">If neuroplasticity is involved, people who repeat behaviors more frequently should show greater automaticity.</p>
+  </div>
+
+  <!-- SURVEY DESIGN -->
+  <div class="label"><span class="label-dot"></span> Section 05</div>
+  <div class="card gold" style="animation-delay:0.35s">
+    <h2>📊 What Will We Measure?</h2>
+    <p style="color:rgba(255,255,255,0.5); font-size:0.85rem; margin-bottom:4px">We can't directly observe neural pathways — so we look for <strong style="color:var(--gold)">behavioral evidence</strong>.</p>
+    <div class="survey-grid">
+      <div class="survey-item">
+        <div class="survey-num">01 ·</div>
+        <div class="survey-title">🔁 Repetition</div>
+        <div class="survey-qs">How often do you do it?<br>How consistently?</div>
+      </div>
+      <div class="survey-item">
+        <div class="survey-num">02 ·</div>
+        <div class="survey-title">🤖 Automaticity</div>
+        <div class="survey-qs">Do you do it without thinking?<br>Does it happen automatically?</div>
+      </div>
+      <div class="survey-item">
+        <div class="survey-num">03 ·</div>
+        <div class="survey-title">🔔 Cue Association</div>
+        <div class="survey-qs">Is it triggered by a cue?</div>
+        <div class="cue-tags" style="margin-top:10px">
+          <span class="cue-tag">⏰ Time</span>
+          <span class="cue-tag">📍 Place</span>
+          <span class="cue-tag">😊 Emotion</span>
+        </div>
+      </div>
+      <div class="survey-item">
+        <div class="survey-num">04 ·</div>
+        <div class="survey-title">📅 Formation Timeline</div>
+        <div class="survey-qs">How long have you done it?<br>How difficult was it at first?<br>How long to feel natural?</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DATA PIPELINE -->
+  <div class="card lavender" style="animation-delay:0.4s">
+    <h2>📈 What We'll Do With the Data</h2>
+    <div class="pipeline">
+      <div class="pipe-step">📝<br>Survey Responses</div>
+      <span class="pipe-arrow">→</span>
+      <div class="pipe-step">🔢<br>Convert to Scores</div>
+      <span class="pipe-arrow">→</span>
+      <div class="pipe-step">⚖️<br>Compare Participants</div>
+      <span class="pipe-arrow">→</span>
+      <div class="pipe-step">🔍<br>Look for Patterns</div>
+      <span class="pipe-arrow">→</span>
+      <div class="pipe-step">🧠<br>Discuss Neuroplasticity</div>
+    </div>
+  </div>
+
+  <!-- MEMORY LOCK -->
+  <div class="label"><span class="label-dot"></span> Memory Lock</div>
+  <div class="memory-lock">
+    <h2>🔐 Memory Lock</h2>
+    <div class="lock-chain">
+      <div class="lock-node"><div class="node-icon">🔁</div>Repeat</div>
+      <span class="lock-connector">→</span>
+      <div class="lock-node"><div class="node-icon">🧠</div>Brain Adapts</div>
+      <span class="lock-connector">→</span>
+      <div class="lock-node"><div class="node-icon">⚡</div>Path Strengthens</div>
+      <span class="lock-connector">→</span>
+      <div class="lock-node"><div class="node-icon">😌</div>Easier</div>
+      <span class="lock-connector">→</span>
+      <div class="lock-node"><div class="node-icon">🤖</div>Automatic</div>
+      <span class="lock-connector">→</span>
+      <div class="lock-node"><div class="node-icon">✅</div>Habit</div>
+      <span class="lock-connector">→</span>
+      <div class="lock-node"><div class="node-icon">🧬</div>Neuroplasticity</div>
+    </div>
+  </div>
+
+  <!-- SUMMARY -->
+  <div class="summary">
+    <p>This project investigates whether <strong>repeated behaviors become more automatic over time</strong> and uses this relationship as behavioral evidence of <strong>neuroplasticity</strong>.</p>
+  </div>
+
+</div>
 </body>
 </html>
